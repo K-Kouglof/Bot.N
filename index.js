@@ -60,9 +60,9 @@ client.on('interactionCreate', async (interaction) => {
   } catch (error) {
     console.error(error);
     if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({ content: '❌ コマンドの実行に失敗しました。', ephemeral: true });
+      await interaction.followUp({ content: '❌ コマンドの実行に失敗しました。', flags: 64 });
     } else {
-      await interaction.reply({ content: '❌ コマンドの実行に失敗しました。', ephemeral: true });
+      await interaction.reply({ content: '❌ コマンドの実行に失敗しました。', flags: 64 });
     }
   }
 });
@@ -74,12 +74,15 @@ client.once('ready', () => {
 client.login(process.env.DISCORD_TOKEN);
 
 const app = express();
-const port = process.env.PORT || 3000; // Renderは自動でPORTを設定します
-
+const port = process.env.PORT || 3000;
 app.get('/', (req, res) => {
-    res.send('Bot is running!');
+  res.send('Bot is running!');
+});
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+// 未処理のエラーキャッチ
+process.on('unhandledRejection', error => {
+  console.error('Unhandled promise rejection:', error);
 });
