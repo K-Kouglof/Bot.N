@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+  "deploy-commands": "node deploy-commands.js",
+  "start": "node index.js"
+  },
   "dependencies": {
     "discord.js": "^14.19.3",
     "dotenv": "^16.0.3",
