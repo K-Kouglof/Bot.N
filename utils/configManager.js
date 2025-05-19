@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-export const configPath = path.join(__dirname, '..', 'config.json');
+export const configPath = '/data/config.json';
 
 // 設定ファイルの読み込み
 export async function loadConfig() {
