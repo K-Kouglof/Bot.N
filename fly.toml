@@ -22,10 +22,11 @@ primary_region = 'hkg'
   cpus = 1
   memory_mb = 1024
 
-[mounts]
-  source = "data"
-  destination = "/data"
+[[mounts]]
+source = "data"
+destination = "/data"
 
 [[mounts]]
-source="data"
-destination="/data2"
+source = "data"
+destination = "/data2"
+
