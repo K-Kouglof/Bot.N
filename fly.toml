@@ -26,10 +26,6 @@ primary_region = 'hkg'
 source = "data1"
 destination = "/data"
 
-[[mounts]]
-source = "data2"
-destination = "/data2"
-
 [scale]
   min = 1
   max = 1
