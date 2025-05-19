@@ -11,7 +11,7 @@ export default {
     console.log('🔍 notifyrole-list loaded config:', config);
 
     if (Object.keys(config).length === 0) {
-      return interaction.reply({ content: '😶 設定が何もありません。', ephemeral: true });
+      return interaction.reply({ content: '😶 設定が何もありません。', flags: 64 });
     }
     // …以下Embed組み立て…
 
