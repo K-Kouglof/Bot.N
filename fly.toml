@@ -23,10 +23,11 @@ primary_region = 'hkg'
   memory_mb = 1024
 
 [[mounts]]
-source = "data"
+source = "data1"
 destination = "/data"
 
 [[mounts]]
-source = "data"
+source = "data2"
 destination = "/data2"
+
 
