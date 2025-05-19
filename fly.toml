@@ -25,3 +25,7 @@ primary_region = 'hkg'
 [mounts]
   source = "data"
   destination = "/data"
+
+[[mounts]]
+source="data"
+destination="/data2"
