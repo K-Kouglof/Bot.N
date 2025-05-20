@@ -39,6 +39,6 @@ export default {
       );
     }
 
-    await interaction.reply({ embeds: [embed], components, flags: 64 });
+    await interaction.reply({ embeds: [embed], components, ephemeral: true });
   }
 };

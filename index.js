@@ -5,7 +5,7 @@ import { readdirSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
-
+import { loadConfig, saveConfig } from "./utils/configManager.js";
 
 // clientは最初に定義する！
 const client = new Client({

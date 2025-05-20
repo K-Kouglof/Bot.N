@@ -1,6 +1,6 @@
 // events/messageCreate.js
 import { ChannelType, EmbedBuilder } from 'discord.js';
-import { loadConfig } from '../utils/configManager.js';
+import { getChannelConfig, updateChannelConfig } from '../utils/configManager.js';
 import { getThreadButtons } from '../utils/buttons.js';
 import { sanitizeThreadTitle } from '../utils/sanitize.js';
 

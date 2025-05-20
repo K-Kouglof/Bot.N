@@ -1,66 +1,85 @@
 // utils/configManager.js
-import { promises as fs } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { createClient } from '@supabase/supabase-js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-export const configPath = '/data/config.json';
+// SupabaseのURLとキーは環境変数や直接埋め込みで指定（開発中であれば以下のように直接書いてもOK）
+const supabaseUrl = 'https://your-project.supabase.co';
+const supabaseKey = 'your-anon-key';
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
-// 設定ファイルの読み込み
+// 単一チャンネルの設定を取得
+export async function getChannelConfig(channelId) {
+  const { data, error } = await supabase
+    .from('channel_settings')
+    .select('*')
+    .eq('channel_id', channelId)
+    .single();
+
+  if (error) {
+    console.error('❌ 設定取得エラー:', error.message);
+    return null;
+  }
+
+  return {
+    notifyRoleId: data.notify_role_id,
+    threadChannelId: data.thread_channel_id,
+    vcCategoryId: data.vc_category_id,
+  };
+}
+
+// 単一チャンネルの設定を更新
+export async function updateChannelConfig(channelId, updateData) {
+  const { error } = await supabase
+    .from('channel_settings')
+    .upsert({
+      channel_id: channelId,
+      notify_role_id: updateData.notifyRoleId,
+      thread_channel_id: updateData.threadChannelId,
+      vc_category_id: updateData.vcCategoryId,
+    });
+
+  if (error) {
+    console.error('❌ 設定保存エラー:', error.message);
+    throw new Error('設定の保存に失敗しました');
+  }
+}
+
+// 全設定を取得
 export async function loadConfig() {
-  try {
-    const raw = await fs.readFile(configPath, 'utf8');
-    return JSON.parse(raw);
-  } catch {
+  const { data, error } = await supabase
+    .from('channel_settings')
+    .select('*');
+
+  if (error) {
+    console.error('❌ 設定取得エラー:', error.message);
     return {};
   }
-}
 
-// 設定ファイルの保存
-export async function saveConfig(config) {
-  try {
-    await fs.writeFile(configPath, JSON.stringify(config, null, 2), 'utf-8');
-  } catch (err) {
-    console.error('設定ファイル保存エラー:', err);
-  }
-}
-
-// チャンネル設定の更新
-export async function updateChannelConfig(channelId, updateData) {
-  try {
-    const config = await loadConfig();
-    config[channelId] = {
-      ...(config[channelId] || {}),
-      ...updateData,
+  const config = {};
+  for (const row of data) {
+    config[row.channel_id] = {
+      notifyRoleId: row.notify_role_id,
+      threadChannelId: row.thread_channel_id,
+      vcCategoryId: row.vc_category_id,
     };
-    await saveConfig(config);
-  } catch (err) {
-    console.error('設定更新エラー:', err);
-    throw new Error('設定の更新に失敗しました');
   }
+  return config;
 }
 
-// チャンネル設定を取得
-export async function getChannelConfig(channelId) {
-  try {
-    const config = await loadConfig();
-    return config[channelId] || null;
-  } catch (err) {
-    console.error('設定取得エラー:', err);
-    throw new Error('設定の取得に失敗しました');
-  }
-}
+// 全設定を保存（上書き）
+export async function saveConfig(config) {
+  const updates = Object.entries(config).map(([channel_id, values]) => ({
+    channel_id,
+    notify_role_id: values.notifyRoleId,
+    thread_channel_id: values.threadChannelId,
+    vc_category_id: values.vcCategoryId,
+  }));
 
-// デバッグ用ログ
-export async function logConfigDebug() {
-  try {
-    const raw = await fs.readFile(configPath, 'utf8');
-    console.log('🔍 configPath =', configPath);
-    console.log('📑 raw config =', raw);
+  const { error } = await supabase
+    .from('channel_settings')
+    .upsert(updates);
 
-    const config = JSON.parse(raw);
-    console.log('⚙️ parsed config =', config);
-  } catch (err) {
-    console.error('❌ デバッグ用ログの読み込み失敗:', err);
+  if (error) {
+    console.error('❌ 設定保存エラー:', error.message);
+    throw new Error('設定の保存に失敗しました');
   }
 }

@@ -1,6 +1,7 @@
 // commands/notifyrole-set.js
 import { SlashCommandBuilder } from 'discord.js';
-import { getChannelConfig, updateChannelConfig } from '../utils/configManager.js';
+import { supabase } from '../utils/configManager.js';
+
 
 export default {
   data: new SlashCommandBuilder()
@@ -53,16 +54,16 @@ export default {
     });
   }
 
-  // 設定更新
-  await updateChannelConfig(channelId, {
-    notifyRoleId: role.id,
-    vcCategoryId: vcCategory.id,
-    threadChannelId: threadChannel.id,
-  });
+// Supabaseに設定保存
+    await setChannelSettings(channelId, {
+      notifyRoleId: role.id,
+      vcCategoryId: vcCategory.id,
+      threadChannelId: threadChannel.id,
+    });
 
-  return interaction.reply({
-    content: `✅ 通知ロール、VCカテゴリ、及び自動スレッド作成チャンネルを設定しました。\n通知ロール: <@&${role.id}>\n自動スレッド作成チャンネル: ${threadChannel.name}\nVCカテゴリ: ${vcCategory.name}`,
-    flags: 64,
-  });
+    return interaction.reply({
+      content: `✅ 通知ロール、VCカテゴリ、及び自動スレッド作成チャンネルを設定しました。\n通知ロール: <@&${role.id}>\n自動スレッド作成チャンネル: ${threadChannel.name}\nVCカテゴリ: ${vcCategory.name}`,
+      flags: 64,
+});
 }
-}
+};
