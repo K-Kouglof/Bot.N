@@ -1,6 +1,7 @@
 // commands/notifyrole-set.js
 import { SlashCommandBuilder } from 'discord.js';
-import { supabase } from '../utils/configManager.js';
+import { getChannelConfig, saveChannelConfig } from '../utils/configManager.js';
+
 
 
 export default {
