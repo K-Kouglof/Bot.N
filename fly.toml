@@ -1,28 +1,23 @@
-# fly.toml app configuration file generated for bot-n on 2025-05-18T12:36:46Z
+# fly.toml app configuration file generated for bot-n-vng0ga on 2025-05-20T05:26:59Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-# fly.toml
-app = "bot-n"
-primary_region = "hkg"
+app = 'bot-n-vng0ga'
+primary_region = 'hkg'
 
 [build]
 
 [http_service]
-  internal_port      = 3000
-  force_https        = true
-  auto_stop_machines = "stop"    # サスペンドしない
-  auto_start_machines= true
-  min_machines_running = 2        # マシン数と合わせる
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
 
 [[vm]]
-  memory     = "1gb"
-  cpu_kind   = "shared"
-  cpus       = 1
-  memory_mb  = 1024
-
-# ここだけ
-[[mounts]]
-source      = "data"
-destination = "/data"
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024
